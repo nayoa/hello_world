@@ -1,0 +1,25 @@
+---
+service: helloWorld
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: eu-west-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+      Resource:
+        - "arn:aws:s3:::hello-world-tech-test/*"
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+
+custom:
+  client:
+    bucketName: hello-world-tech-test
