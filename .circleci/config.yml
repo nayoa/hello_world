@@ -1,9 +1,5 @@
 version: 2.1
 
-docker:
-  - image: circleci/node:10.16.3
-
-
 jobs:
   test:
     docker:
@@ -40,19 +36,19 @@ jobs:
       - run:
           name: Deploy to Staging
           command: serverless deploy --stage staging
-  deploy_production:
-    docker:
-      - image: circleci/node:10.16.3
-    working_directory: ~/hello_world
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - dependencies-cache-{{ checksum "package.json" }}
-            - dependencies-cache
-      - run:
-          name: Deploy to Production
-          command: serverless deploy --stage production
+  # deploy_production:
+  #   docker:
+  #     - image: circleci/node:10.16.3
+  #   working_directory: ~/hello_world
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #           - dependencies-cache-{{ checksum "package.json" }}
+  #           - dependencies-cache
+  #     - run:
+  #         name: Deploy to Production
+  #         command: serverless deploy --stage production
 
 workflows:
   version: 2
@@ -64,12 +60,12 @@ workflows:
             - test
           filters:
             branches:
-              - develop
+              only: develop
       - deploy_production:
           type: approval
           requires:
             - deploy_staging
           filters:
             branches:
-              - master
+              only: master
 
