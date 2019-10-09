@@ -1,0 +1,94 @@
+version: 2.1
+
+executors:
+  node:
+    docker:
+      - image: circleci/node:10.16.3
+    working_directory: ~/hello_world
+
+jobs:
+  test:
+    executor: node
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            - dependencies-cache
+
+      - run:
+          name: Install Node Dependencies
+          command: npm install
+
+      - run:
+          name: Install npm package 'Severless'
+          command: sudo npm -i -g install serverless
+
+      - run:
+          name: Test lambda function locally
+          command: serverless invoke local --function hello
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-cache-{{ checksum "package.json" }}
+
+  deploy_staging:
+    executor: node
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            - dependencies-cache
+
+      - run:
+          name: Install npm package 'Severless'
+          command: sudo npm -i -g install serverless
+
+      - run:
+          name: Deploy to Staging
+          command: serverless deploy
+          environment:
+            ENV: staging
+
+  deploy_production:
+    executor: node
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            - dependencies-cache
+
+      - run:
+          name: Install npm package 'Severless'
+          command: sudo npm -i -g install serverless
+
+      - run:
+          name: Deploy to Production
+          command: serverless deploy
+          environment:
+            ENV: production
+
+workflows:
+  version: 2
+  test_deploy:
+    jobs:
+      - test
+      - deploy_staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop
+      - deploy_production:
+          type: approval
+          requires:
+            - deploy_staging
+          filters:
+            branches:
+              only: master

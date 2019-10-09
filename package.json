@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/nayoa/hello_world/issues"
   },
-  "homepage": "https://github.com/nayoa/hello_world#readme"
+  "homepage": "https://github.com/nayoa/hello_world#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "aws-sdk": "^2.545.0"
+  }
 }
