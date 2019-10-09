@@ -11,6 +11,9 @@ provider:
         - "s3:PutObject"
       Resource:
         - "arn:aws:s3:::hello-world-tech-test/*"
+  environment:
+    ENV: ${env:ENV}
+  stage: ${env:ENV}
 
 functions:
   hello:

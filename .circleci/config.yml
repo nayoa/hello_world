@@ -38,6 +38,7 @@ jobs:
     executor: node
     steps:
       - checkout
+
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
@@ -49,7 +50,9 @@ jobs:
 
       - run:
           name: Deploy to Staging
-          command: serverless deploy --stage staging
+          command: serverless deployment
+          environment:
+            ENV: staging
 
   deploy_production:
     executor: node
@@ -67,7 +70,9 @@ jobs:
 
       - run:
           name: Deploy to Production
-          command: serverless deploy --stage production
+          command: serverless deploy
+          environment:
+            ENV: production
 
 workflows:
   version: 2
@@ -87,4 +92,3 @@ workflows:
           filters:
             branches:
               only: master
-
