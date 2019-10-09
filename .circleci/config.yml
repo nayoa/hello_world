@@ -11,7 +11,6 @@ jobs:
     executor: node
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
@@ -38,7 +37,6 @@ jobs:
     executor: node
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
@@ -58,7 +56,6 @@ jobs:
     executor: node
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
@@ -86,8 +83,9 @@ workflows:
             branches:
               only: develop
       - deploy_production:
+          type: approval
           requires:
-            - deploy_staging
+            - test
           filters:
             branches:
               only: master

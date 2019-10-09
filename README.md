@@ -91,4 +91,4 @@ To automate the deployment, a CircleCI pipeline it attached to this repository. 
 * More comfortable with Python and Boto3
 * New to the Serverless Framework
 * Should have more tests as part of the pipeline
-* Create docker image with serverless pre-installed
+* Create docker image with npm package `serverless` pre-installed
