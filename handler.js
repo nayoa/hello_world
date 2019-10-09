@@ -15,7 +15,7 @@ module.exports.hello = (event, context, callback) => {
   var environment = process.env.URL
 
    var s3params = {
-    Body: `Hello World on ${dateTime}`,
+    Body: `Hello World on ${dateTime} !`,
     Bucket: "hello-world-tech-test",
     Key:  `/${environment}/hello.txt`,
    };
