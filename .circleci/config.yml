@@ -91,7 +91,7 @@ workflows:
               only: master
       - deploy_production:
           requires:
-            - approve_production_deploymemnt
+            - approve_production_deployment
           filters:
             branches:
               only: master
