@@ -12,12 +12,12 @@ module.exports.hello = (event, context, callback) => {
     body: JSON.stringify(successString)
   }
 
-  var environment = process.env.URL
+  var environment = process.env.ENV;
 
    var s3params = {
     Body: `Hello World on ${dateTime} !`,
     Bucket: "hello-world-tech-test",
-    Key:  `/${environment}/hello.txt`,
+    Key:  `${environment}/hello.txt`,
    };
 
    s3.putObject(s3params, function(err) {
