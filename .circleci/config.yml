@@ -82,10 +82,16 @@ workflows:
           filters:
             branches:
               only: develop
-      - deploy_production:
+      - approve_production_deployment:
           type: approval
           requires:
             - test
+          filters:
+            branches:
+              only: master
+      - deploy_production:
+          requires:
+            - approve_production_deploymemnt
           filters:
             branches:
               only: master
