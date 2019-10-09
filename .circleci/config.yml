@@ -42,6 +42,11 @@ jobs:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
             - dependencies-cache
+
+      - run:
+          name: Install npm package 'Severless'
+          command: sudo npm -i -g install serverless
+
       - run:
           name: Deploy to Staging
           command: serverless deploy --stage staging
@@ -50,10 +55,16 @@ jobs:
     executor: node
     steps:
       - checkout
+
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
             - dependencies-cache
+
+      - run:
+          name: Install npm package 'Severless'
+          command: sudo npm -i -g install serverless
+
       - run:
           name: Deploy to Production
           command: serverless deploy --stage production
