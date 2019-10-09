@@ -7,22 +7,25 @@ jobs:
     working_directory: ~/hello_world
     steps:
       - checkout
+
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
             - dependencies-cache
+
       - run:
-          name: Install Serverless and Node Dependencies
-          command: |
-            sudo npm -i -g serverless
-            npm install
+          name: Install Node Dependencies
+          command: npm install
+
       - run:
           name: Test lambda function locally
           command: serverless invoke local --function hello
+
       - save_cache:
           paths:
             - node_modules
           key: dependencies-cache-{{ checksum "package.json" }}
+
   deploy_staging:
     docker:
       - image: circleci/node:10.16.3
@@ -36,19 +39,19 @@ jobs:
       - run:
           name: Deploy to Staging
           command: serverless deploy --stage staging
-  # deploy_production:
-  #   docker:
-  #     - image: circleci/node:10.16.3
-  #   working_directory: ~/hello_world
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - dependencies-cache-{{ checksum "package.json" }}
-  #           - dependencies-cache
-  #     - run:
-  #         name: Deploy to Production
-  #         command: serverless deploy --stage production
+  deploy_production:
+    docker:
+      - image: circleci/node:10.16.3
+    working_directory: ~/hello_world
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            - dependencies-cache
+      - run:
+          name: Deploy to Production
+          command: serverless deploy --stage production
 
 workflows:
   version: 2
